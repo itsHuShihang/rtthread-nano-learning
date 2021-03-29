@@ -92,4 +92,3 @@ void eclic_mtip_handler(void)
     /* leave interrupt */
     rt_interrupt_leave();
 }
-
