@@ -2,7 +2,8 @@
     "files.associations": {
         "rthw.h": "c",
         "rtthread.h": "c",
-        "gd32vf103.h": "c"
+        "gd32vf103.h": "c",
+        "system_gd32vf103.h": "c"
     },
     "C_Cpp.dimInactiveRegions": false
 }

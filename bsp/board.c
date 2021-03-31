@@ -28,6 +28,7 @@ void riscv_clock_init(void)
     SystemInit();
 
     /* ECLIC init */
+    //ECLIC是GD32VF103里的改进型中断控制器，这里应该改成Pulpino里的中断控制器相关函数
     eclic_init(ECLIC_NUM_INTERRUPTS);
     eclic_mode_enable();
     set_csr(mstatus, MSTATUS_MIE);
@@ -44,6 +45,8 @@ static void ostick_config(rt_uint32_t ticks)
 }
 
 #if defined(RT_USING_USER_MAIN) && defined(RT_USING_HEAP)
+
+//可以更改 RT_HEAP_SIZE 的大小，至少大于各个动态申请内存大小之和，但要小于芯片 RAM 总大小
 #define RT_HEAP_SIZE 1024
 static uint32_t rt_heap[RT_HEAP_SIZE];  // heap default size: 4K(1024 * 4)
 RT_WEAK void *rt_heap_begin_get(void)
@@ -73,6 +76,8 @@ void rt_hw_board_init()
     rt_components_board_init();
 #endif
 
+//使用宏定义选择是否打开内存堆功能，默认不打开，比较小巧
+//开启则可以使用可以使用动态内存功能，如使用 rt_malloc、rt_free 以及各种系统动态创建对象的 API
 #if defined(RT_USING_USER_MAIN) && defined(RT_USING_HEAP)
     rt_system_heap_init(rt_heap_begin_get(), rt_heap_end_get());
 #endif
