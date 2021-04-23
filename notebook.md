@@ -51,3 +51,11 @@ rt_base_t rt_hw_interrupt_disable(void);
 void rt_hw_interrupt_enable(rt_base_t level);
 // 恢复调用rt_hw_interrupt_disable()函数前的中断状态
 ```
+一个保证一行代码互斥运行的例子：
+```c
+    /* 关闭中断 */
+    level = rt_hw_interrupt_disable();
+    a = a + value;
+    /* 恢复中断 */
+    rt_hw_interrupt_enable(level);
+```
