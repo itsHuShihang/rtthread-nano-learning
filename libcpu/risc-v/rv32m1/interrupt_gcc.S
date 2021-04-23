@@ -14,12 +14,12 @@
   .align 2
   .global IRQ_Handler
 IRQ_Handler:
-
+    //STORE is sw, LOAD is lw
     /* save all from thread context */
     addi sp, sp, -32 * REGBYTES
 
     STORE x1,   1 * REGBYTES(sp)
-    li    t0,   0x80
+    li    t0,   0x80 // t0 is x5
     STORE t0,   2 * REGBYTES(sp)
 
     STORE x4,   4 * REGBYTES(sp)
@@ -54,6 +54,7 @@ IRQ_Handler:
     move  s0, sp
 
     /* switch to interrupt stack */
+    // la：将某个内存中存的地址加载到寄存器中
     la    sp, __stack
 
     /* interrupt handle */
@@ -71,6 +72,8 @@ IRQ_Handler:
     la    s0, rt_thread_switch_interrupt_flag
     lw    s2, 0(s0)
     beqz  s2, spurious_interrupt
+    /* beqz指令: 若s2=0,则跳转到以spurious_interrupt为偏移量的地方 */
+
     /* clear switch interrupt flag */
     sw    zero, 0(s0)
 
@@ -94,6 +97,7 @@ spurious_interrupt:
     /* Remain in M-mode after mret */
     li    t0, 0x00001800
     csrs  mstatus, t0
+    /* csrs指令：用t0的值按位对mstatus置q1 */
     LOAD  t0,   2 * REGBYTES(sp)
     csrs  mstatus, t0 
 
