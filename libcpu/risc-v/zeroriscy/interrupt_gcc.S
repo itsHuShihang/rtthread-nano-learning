@@ -1,14 +1,16 @@
 /*
- * Copyright (c) 2006-2018, RT-Thread Development Team
+ * Copyright (c) 2006-2021, Hu Shihang
  *
  * SPDX-License-Identifier: Apache-2.0
  *
  * Change Logs:
  * Date           Author       Notes
- * 2018/10/02     Bernard      The first version
+ * 2021/4/25     Hu Shihang    The first version
  */
 
 #include "cpuport.h"
+
+#define EXCEPTION_STACK_SIZE 96
 
   .section      .text.entry
   .align 2
@@ -16,7 +18,7 @@
 IRQ_Handler:
     //STORE is sw, LOAD is lw
     /* save all from thread context */
-    addi sp, sp, -32 * REGBYTES
+    addi sp, sp, -EXCEPTION_STACK_SIZE
 
     STORE x1,   1 * REGBYTES(sp)
     li    t0,   0x80 // t0 is x5
@@ -34,22 +36,6 @@ IRQ_Handler:
     STORE x13, 13 * REGBYTES(sp)
     STORE x14, 14 * REGBYTES(sp)
     STORE x15, 15 * REGBYTES(sp)
-    STORE x16, 16 * REGBYTES(sp)
-    STORE x17, 17 * REGBYTES(sp)
-    STORE x18, 18 * REGBYTES(sp)
-    STORE x19, 19 * REGBYTES(sp)
-    STORE x20, 20 * REGBYTES(sp)
-    STORE x21, 21 * REGBYTES(sp)
-    STORE x22, 22 * REGBYTES(sp)
-    STORE x23, 23 * REGBYTES(sp)
-    STORE x24, 24 * REGBYTES(sp)
-    STORE x25, 25 * REGBYTES(sp)
-    STORE x26, 26 * REGBYTES(sp)
-    STORE x27, 27 * REGBYTES(sp)
-    STORE x28, 28 * REGBYTES(sp)
-    STORE x29, 29 * REGBYTES(sp)
-    STORE x30, 30 * REGBYTES(sp)
-    STORE x31, 31 * REGBYTES(sp)
 
     move  s0, sp
 
@@ -113,22 +99,6 @@ spurious_interrupt:
     LOAD  x13, 13 * REGBYTES(sp)
     LOAD  x14, 14 * REGBYTES(sp)
     LOAD  x15, 15 * REGBYTES(sp)
-    LOAD  x16, 16 * REGBYTES(sp)
-    LOAD  x17, 17 * REGBYTES(sp)
-    LOAD  x18, 18 * REGBYTES(sp)
-    LOAD  x19, 19 * REGBYTES(sp)
-    LOAD  x20, 20 * REGBYTES(sp)
-    LOAD  x21, 21 * REGBYTES(sp)
-    LOAD  x22, 22 * REGBYTES(sp)
-    LOAD  x23, 23 * REGBYTES(sp)
-    LOAD  x24, 24 * REGBYTES(sp)
-    LOAD  x25, 25 * REGBYTES(sp)
-    LOAD  x26, 26 * REGBYTES(sp)
-    LOAD  x27, 27 * REGBYTES(sp)
-    LOAD  x28, 28 * REGBYTES(sp)
-    LOAD  x29, 29 * REGBYTES(sp)
-    LOAD  x30, 30 * REGBYTES(sp)
-    LOAD  x31, 31 * REGBYTES(sp)
 
-    addi  sp, sp, 32 * REGBYTES
+    addi  sp, sp, EXCEPTION_STACK_SIZE
     mret
