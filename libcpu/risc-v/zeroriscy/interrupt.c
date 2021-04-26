@@ -11,7 +11,7 @@
 #include <rthw.h>
 
 #include <board.h>
-#include <RV32M1_ri5cy.h>
+#include "event.h"
 
 typedef void (*irq_handler_t)(void);
 extern const irq_handler_t isrTable[];
@@ -25,8 +25,7 @@ void SystemIrqHandler(uint32_t mcause)
         intNum = mcause & 0x1FUL; // get the values of the 0th~4th bits
 
         /* Clear pending flag in EVENT unit .*/
-        // I will rewrite this line, remember include event.h
-        EVENT_UNIT->INTPTPENDCLEAR = (1U << intNum);
+        ICP = (1U << intNum);
 
         /* Now call the real irq handler for intNum */
         isrTable[intNum]();
